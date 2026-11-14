@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="300">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAPS Daily Brief — 13 Nov 2026</title>
+<style>
+/* ── tokens ── */
+:root {
+  --bg: #f7f8fa; --surface: #fff; --border: #e2e6ea;
+  --fg: #1a1d23; --fg2: #5a6270; --accent: #0d9488;
+  --bull: #16a34a; --bear: #dc2626;
+  --t1: #1d4ed8; --t2: #0891b2; --t3: #7c3aed;
+  --tier-t1-bg: #dbeafe; --tier-t1-fg: #1e40af;
+  --tier-t2-bg: #cffafe; --tier-t2-fg: #0e7490;
+  --tier-t3-bg: #ede9fe; --tier-t3-fg: #5b21b6;
+  --iv-hi: #b45309; --iv-lo: #059669; --iv-mid: var(--fg2);
+  --pcr-hi: #15803d; --pcr-lo: #b91c1c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117; --surface: #1a1d27; --border: #2d3140;
+    --fg: #e8eaf0; --fg2: #8b92a8; --accent: #2dd4bf;
+    --bull: #4ade80; --bear: #f87171;
+    --tier-t1-bg: #1e3a8a; --tier-t1-fg: #93c5fd;
+    --tier-t2-bg: #164e63; --tier-t2-fg: #67e8f9;
+    --tier-t3-bg: #3b0764; --tier-t3-fg: #c4b5fd;
+    --iv-hi: #fbbf24; --iv-lo: #34d399; --iv-mid: var(--fg2);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --surface: #1a1d27; --border: #2d3140;
+  --fg: #e8eaf0; --fg2: #8b92a8; --accent: #2dd4bf;
+  --bull: #4ade80; --bear: #f87171;
+  --tier-t1-bg: #1e3a8a; --tier-t1-fg: #93c5fd;
+  --tier-t2-bg: #164e63; --tier-t2-fg: #67e8f9;
+  --tier-t3-bg: #3b0764; --tier-t3-fg: #c4b5fd;
+  color-scheme: dark;
+}
+
+/* ── base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 0 0 40px;
+}
+
+/* ── header ── */
+.page-header {
+  background: var(--surface); border-bottom: 4px solid var(--accent);
+  padding: 18px 28px 14px;
+}
+.page-header h1 { font-size: 1.25rem; color: var(--accent); margin-bottom: 4px; }
+.page-header .date-line { color: var(--fg2); font-size: 0.82rem; }
+.v3-badge {
+  display: inline-block; background: var(--accent); color: #fff;
+  font-size: 0.58rem; font-weight: 900; padding: 2px 7px; border-radius: 4px;
+  vertical-align: middle; letter-spacing: .08em; margin-left: 8px;
+  line-height: 1.6;
+}
+
+/* ── sections ── */
+.section { margin: 24px 20px; }
+.section h2 {
+  font-size: 1rem; font-weight: 700; color: var(--fg);
+  margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.section h2 small.ts { font-weight: 400; font-size: 0.78rem; color: var(--fg2); }
+
+/* ── market bar ── */
+.market-bar {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px; margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+.market-bar .scan-meta { color: var(--fg2); font-size: 0.82rem; margin-left: auto; }
+.dir-bull { color: var(--bull); } .dir-bear { color: var(--bear); }
+
+/* ── signals table ── */
+.signals-table {
+  width: 100%; border-collapse: collapse; font-size: 0.83rem;
+  background: var(--surface); border-radius: 8px; overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.signals-table th {
+  background: var(--border); color: var(--fg2);
+  font-weight: 600; font-size: 0.76rem; text-transform: uppercase;
+  letter-spacing: .04em; padding: 8px 10px; text-align: left;
+}
+.signals-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.signals-table tbody tr:last-child td { border-bottom: none; }
+.signals-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.sym { font-weight: 700; font-size: 0.9rem; }
+.conv { font-weight: 700; text-align: right; }
+.stage { color: var(--fg2); }
+.strat { font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+.strat-name { color: var(--accent); }
+.futures-badge {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
+}
+.fut-long  { background: #dcfce7; color: #15803d; }
+.fut-short { background: #fee2e2; color: #b91c1c; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fut-long  { background: #14532d; color: #86efac; }
+  :root:not([data-theme="light"]) .fut-short { background: #7f1d1d; color: #fca5a5; }
+}
+:root[data-theme="dark"] .fut-long  { background: #14532d; color: #86efac; }
+:root[data-theme="dark"] .fut-short { background: #7f1d1d; color: #fca5a5; }
+.opts { font-size: 0.8rem; }
+.sigs { font-size: 0.76rem; color: var(--fg2); }
+.na { color: var(--border); }
+
+/* ── tier badges ── */
+.tier {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: .04em;
+}
+.tier-t1 { background: var(--tier-t1-bg); color: var(--tier-t1-fg); }
+.tier-t2 { background: var(--tier-t2-bg); color: var(--tier-t2-fg); }
+.tier-t3 { background: var(--tier-t3-bg); color: var(--tier-t3-fg); }
+
+/* ── direction badges ── */
+.dir {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700;
+}
+.dir-bull { background: #dcfce7; color: #15803d; }
+.dir-bear { background: #fee2e2; color: #b91c1c; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dir-bull { background: #14532d; color: #86efac; }
+  :root:not([data-theme="light"]) .dir-bear { background: #7f1d1d; color: #fca5a5; }
+}
+:root[data-theme="dark"] .dir-bull { background: #14532d; color: #86efac; }
+:root[data-theme="dark"] .dir-bear { background: #7f1d1d; color: #fca5a5; }
+
+/* ── IV / PCR colouring ── */
+.iv-hi { color: var(--iv-hi); font-weight: 600; }
+.iv-lo { color: var(--iv-lo); font-weight: 600; }
+.iv-mid { color: var(--iv-mid); }
+.pcr-hi { color: var(--pcr-hi); font-weight: 600; }
+.pcr-lo { color: var(--pcr-lo); font-weight: 600; }
+
+/* ── misc ── */
+.footer-note { color: var(--fg2); font-size: 0.8rem; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div style="position:sticky;top:0;z-index:1000;padding:8px 16px;background:#111827;color:#f9fafb;font:14px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline"><strong>TAPS Daily Brief — 13 Nov 2026</strong><span style="opacity:.8">Last updated 2026-11-14 10:11 IST · refreshes every 5 min</span><a href="20261113_report.html" style="color:#93c5fd;margin-left:auto">permalink</a></div>
+<div class="page-header">
+  <h1>TAPS Daily Brief — 13 Nov 2026 <span class="v3-badge">V3</span></h1>
+  <div class="date-line">TAPS &nbsp;·&nbsp; 13 Nov 2026</div>
+</div>
+
+<div class="section" id="s1">
+  <h2>Section 1 — Evening Pre-Screen &nbsp;<small class="ts">13-Nov-2026 21:22 IST</small></h2>
+  <div class="market-bar"><span>NIFTY <strong>25,144.3</strong></span><span>RS(20) <strong class="dir-bull">+9.3%</strong></span><span class="scan-meta">Scanned 213 symbols &nbsp;·&nbsp; <strong>9</strong> candidates &nbsp;·&nbsp; 204 filtered</span></div>
+  
+<div class="index-section">
+  <h3 class="index-heading">Index Trades — NIFTY &amp; BankNifty</h3>
+  <div class="idx-cards">
+
+<div class="idx-card idx-bull">
+  <div class="idx-header">
+    <span class="idx-sym">NIFTY</span>
+    <span class="idx-dir dir dir-bull">BULLISH</span>
+    <span class="idx-strat-badge">SPREAD</span>
+  </div>
+  <div class="idx-strategy">BULL_PUT_SPREAD</div>
+  <div class="idx-legs">
+    <span class="dl">Legs</span> <strong>Sell PE 25100 / Buy PE 25000</strong>
+    <span class="idx-expiry">WEEKLY 17-NOV-2026</span>
+  </div>
+  <div class="idx-metrics">
+    <span>ATM 25150</span>
+    <span class="iv-lo">IVR 9</span>
+    <span class="pcr-lo">PCR 0.79 (BEARISH)</span>
+    <span>Skew 0.83 (BALANCED)</span>
+    <span>VIX 15.5 <em class="vix-r">MODERATE</em></span>
+  </div>
+  <div class="idx-rationale">MODERATE bullish signal. IV rank 9 — credit put spread, theta positive.</div>
+</div>
+
+<div class="idx-card idx-bull">
+  <div class="idx-header">
+    <span class="idx-sym">BANKNIFTY</span>
+    <span class="idx-dir dir dir-bull">BULLISH</span>
+    <span class="idx-strat-badge">SPREAD</span>
+  </div>
+  <div class="idx-strategy">BULL_PUT_SPREAD</div>
+  <div class="idx-legs">
+    <span class="dl">Legs</span> <strong>Sell PE 60900 / Buy PE 60700</strong>
+    <span class="idx-expiry">MONTHLY 23-NOV-2026</span>
+  </div>
+  <div class="idx-metrics">
+    <span>ATM 61000</span>
+    <span class="iv-mid">IVR —</span>
+    <span class="">PCR 0.95 (NEUTRAL)</span>
+    <span>Skew 0.86 (BALANCED)</span>
+    <span>VIX 15.5 <em class="vix-r">MODERATE</em></span>
+  </div>
+  <div class="idx-rationale">MODERATE bullish signal. IV rank N/A — credit put spread, theta positive.</div>
+</div>
+
+  </div>
+</div>
+<style>
+.index-section { margin-bottom: 20px; }
+.index-heading { font-size: 0.88rem; font-weight: 700; color: var(--fg2);
+                  text-transform: uppercase; letter-spacing: .05em;
+                  margin-bottom: 10px; }
+.idx-cards { display: flex; gap: 16px; flex-wrap: wrap; }
+.idx-card {
+  flex: 1 1 280px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px;
+}
+.idx-card.idx-bull { border-left: 4px solid var(--bull); }
+.idx-card.idx-bear { border-left: 4px solid var(--bear); }
+.idx-card.idx-neutral { border-left: 4px solid var(--fg2); }
+.idx-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.idx-sym { font-size: 1rem; font-weight: 800; }
+.idx-strat-badge {
+  margin-left: auto; font-size: 0.7rem; font-weight: 700;
+  background: var(--border); color: var(--fg2);
+  padding: 1px 7px; border-radius: 10px; text-transform: uppercase;
+}
+.idx-strat-badge.idx-fut {
+  background: #fef3c7; color: #92400e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .idx-strat-badge.idx-fut {
+    background: #451a03; color: #fcd34d;
+  }
+}
+:root[data-theme="dark"] .idx-strat-badge.idx-fut {
+  background: #451a03; color: #fcd34d;
+}
+.idx-strategy { font-size: 0.82rem; font-weight: 700; color: var(--accent);
+                 margin-bottom: 6px; }
+.idx-legs { font-size: 0.82rem; margin-bottom: 6px; }
+.idx-expiry { color: var(--fg2); font-size: 0.76rem; margin-left: 8px; }
+.idx-metrics {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  font-size: 0.78rem; color: var(--fg2);
+}
+.idx-metrics span { white-space: nowrap; }
+.vix-r { font-style: normal; font-size: 0.72rem; }
+.idx-rationale {
+  margin-top: 8px; font-size: 0.78rem; color: var(--fg2);
+  border-top: 1px solid var(--border); padding-top: 6px; line-height: 1.55;
+}
+</style>
+
+  <table class="signals-table">
+    <thead>
+      <tr>
+        <th>Symbol</th><th>Tier</th><th>Dir</th><th>Stage</th>
+        <th>Conv</th><th>RS 5d / 20d</th><th>Strategy</th>
+        <th>IV Rank / ATM IV</th><th>PCR / OI Skew</th><th>Beta</th>
+        <th>Crossovers</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr class="sig-row"><td class="sym">PAGEIND</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 100</span></td><td class="conv">35</td><td class="opts">-13.3% <span class="na">/ -23.5%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 100</span> / 39.2%</td><td class="opts"><span class="pcr-lo">PCR 0.39</span> / skew 0.62</td><td class="opts">0.64</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×2b</td></tr>
+<tr class="sig-row"><td class="sym">AMBER</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 60</span></td><td class="conv">34</td><td class="opts">+5.3% <span class="na">/ -8.1%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 20</span> / 42.1%</td><td class="opts"><span class="">PCR 1.02</span> / skew 0.50</td><td class="opts">0.83</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×1b, DMA×1b</td></tr>
+<tr class="sig-row"><td class="sym">COCHINSHIP</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 80</span></td><td class="conv">33</td><td class="opts">-3.9% <span class="na">/ -15.4%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 80</span> / 35.5%</td><td class="opts"><span class="pcr-lo">PCR 0.44</span> / skew 0.55</td><td class="opts">0.99</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×3b, DMA×1b</td></tr>
+<tr class="sig-row"><td class="sym">FEDERALBNK</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 100</span></td><td class="conv">28</td><td class="opts">+5.7% <span class="na">/ -1.6%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-mid">IVR 58</span> / 22.2%</td><td class="opts"><span class="pcr-lo">PCR 0.67</span> / skew 0.53</td><td class="opts">0.16</td><td class="sigs">Compound: STRONG, RS: EARLY_MOVER, RSI×4b, DMA×4b</td></tr>
+<tr class="sig-row"><td class="sym">BDL</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 80</span></td><td class="conv">28</td><td class="opts">-3.3% <span class="na">/ -17.9%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 70</span> / 37.2%</td><td class="opts"><span class="pcr-lo">PCR 0.54</span> / skew 1.48</td><td class="opts">1.01</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×1b</td></tr>
+<tr class="sig-row"><td class="sym">GVT&amp;D</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 100</span></td><td class="conv">25</td><td class="opts">+9.6% <span class="na">/ +2.6%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-mid">IVR 63</span> / 41.5%</td><td class="opts"><span class="pcr-lo">PCR 0.66</span> / skew 0.59</td><td class="opts">-0.16</td><td class="sigs">Compound: STRONG, RS: BUILDING, RSI×4b, DMA×5b</td></tr>
+<tr class="sig-row"><td class="sym">ALKEM</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">24</td><td class="opts">-3.9% <span class="na">/ -9.5%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-mid">IVR 43</span> / 30.9%</td><td class="opts"><span class="pcr-lo">PCR 0.42</span> / skew 0.86</td><td class="opts">0.60</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×1b</td></tr>
+<tr class="sig-row"><td class="sym">ONGC</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">23</td><td class="opts">-3.4% <span class="na">/ -9.2%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 100</span> / 19.9%</td><td class="opts"><span class="pcr-lo">PCR 0.47</span> / skew 0.26</td><td class="opts">0.20</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×2b</td></tr>
+<tr class="sig-row"><td class="sym">TATAPOWER</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">18</td><td class="opts">-1.7% <span class="na">/ -9.8%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 100</span> / 30.0%</td><td class="opts"><span class="pcr-lo">PCR 0.43</span> / skew 0.76</td><td class="opts">0.51</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×1b</td></tr>
+    </tbody>
+  </table>
+  <p class="footer-note">
+    9 candidates screened · 8 new PENDING · 0 carried forward · 1 already confirmed — confirmation check at 09:20 tomorrow.
+  </p>
+</div>
+
+<!-- APPEND_HERE -->
+</body>
+</html>
