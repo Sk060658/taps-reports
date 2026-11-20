@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAPS Daily Brief — 20 Nov 2026</title>
+<style>
+/* ── tokens ── */
+:root {
+  --bg: #f7f8fa; --surface: #fff; --border: #e2e6ea;
+  --fg: #1a1d23; --fg2: #5a6270; --accent: #0d9488;
+  --bull: #16a34a; --bear: #dc2626;
+  --t1: #1d4ed8; --t2: #0891b2; --t3: #7c3aed;
+  --tier-t1-bg: #dbeafe; --tier-t1-fg: #1e40af;
+  --tier-t2-bg: #cffafe; --tier-t2-fg: #0e7490;
+  --tier-t3-bg: #ede9fe; --tier-t3-fg: #5b21b6;
+  --iv-hi: #b45309; --iv-lo: #059669; --iv-mid: var(--fg2);
+  --pcr-hi: #15803d; --pcr-lo: #b91c1c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117; --surface: #1a1d27; --border: #2d3140;
+    --fg: #e8eaf0; --fg2: #8b92a8; --accent: #2dd4bf;
+    --bull: #4ade80; --bear: #f87171;
+    --tier-t1-bg: #1e3a8a; --tier-t1-fg: #93c5fd;
+    --tier-t2-bg: #164e63; --tier-t2-fg: #67e8f9;
+    --tier-t3-bg: #3b0764; --tier-t3-fg: #c4b5fd;
+    --iv-hi: #fbbf24; --iv-lo: #34d399; --iv-mid: var(--fg2);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --surface: #1a1d27; --border: #2d3140;
+  --fg: #e8eaf0; --fg2: #8b92a8; --accent: #2dd4bf;
+  --bull: #4ade80; --bear: #f87171;
+  --tier-t1-bg: #1e3a8a; --tier-t1-fg: #93c5fd;
+  --tier-t2-bg: #164e63; --tier-t2-fg: #67e8f9;
+  --tier-t3-bg: #3b0764; --tier-t3-fg: #c4b5fd;
+  color-scheme: dark;
+}
+
+/* ── base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 0 0 40px;
+}
+
+/* ── header ── */
+.page-header {
+  background: var(--surface); border-bottom: 4px solid var(--accent);
+  padding: 18px 28px 14px;
+}
+.page-header h1 { font-size: 1.25rem; color: var(--accent); margin-bottom: 4px; }
+.page-header .date-line { color: var(--fg2); font-size: 0.82rem; }
+.v3-badge {
+  display: inline-block; background: var(--accent); color: #fff;
+  font-size: 0.58rem; font-weight: 900; padding: 2px 7px; border-radius: 4px;
+  vertical-align: middle; letter-spacing: .08em; margin-left: 8px;
+  line-height: 1.6;
+}
+
+/* ── sections ── */
+.section { margin: 24px 20px; }
+.section h2 {
+  font-size: 1rem; font-weight: 700; color: var(--fg);
+  margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.section h2 small.ts { font-weight: 400; font-size: 0.78rem; color: var(--fg2); }
+
+/* ── market bar ── */
+.market-bar {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 16px; margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+.market-bar .scan-meta { color: var(--fg2); font-size: 0.82rem; margin-left: auto; }
+.dir-bull { color: var(--bull); } .dir-bear { color: var(--bear); }
+
+/* ── signals table ── */
+.signals-table {
+  width: 100%; border-collapse: collapse; font-size: 0.83rem;
+  background: var(--surface); border-radius: 8px; overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.signals-table th {
+  background: var(--border); color: var(--fg2);
+  font-weight: 600; font-size: 0.76rem; text-transform: uppercase;
+  letter-spacing: .04em; padding: 8px 10px; text-align: left;
+}
+.signals-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.signals-table tbody tr:last-child td { border-bottom: none; }
+.signals-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.sym { font-weight: 700; font-size: 0.9rem; }
+.conv { font-weight: 700; text-align: right; }
+.stage { color: var(--fg2); }
+.strat { font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+.strat-name { color: var(--accent); }
+.futures-badge {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
+}
+.fut-long  { background: #dcfce7; color: #15803d; }
+.fut-short { background: #fee2e2; color: #b91c1c; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fut-long  { background: #14532d; color: #86efac; }
+  :root:not([data-theme="light"]) .fut-short { background: #7f1d1d; color: #fca5a5; }
+}
+:root[data-theme="dark"] .fut-long  { background: #14532d; color: #86efac; }
+:root[data-theme="dark"] .fut-short { background: #7f1d1d; color: #fca5a5; }
+.opts { font-size: 0.8rem; }
+.sigs { font-size: 0.76rem; color: var(--fg2); }
+.na { color: var(--border); }
+
+/* ── tier badges ── */
+.tier {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: .04em;
+}
+.tier-t1 { background: var(--tier-t1-bg); color: var(--tier-t1-fg); }
+.tier-t2 { background: var(--tier-t2-bg); color: var(--tier-t2-fg); }
+.tier-t3 { background: var(--tier-t3-bg); color: var(--tier-t3-fg); }
+
+/* ── direction badges ── */
+.dir {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.72rem; font-weight: 700;
+}
+.dir-bull { background: #dcfce7; color: #15803d; }
+.dir-bear { background: #fee2e2; color: #b91c1c; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dir-bull { background: #14532d; color: #86efac; }
+  :root:not([data-theme="light"]) .dir-bear { background: #7f1d1d; color: #fca5a5; }
+}
+:root[data-theme="dark"] .dir-bull { background: #14532d; color: #86efac; }
+:root[data-theme="dark"] .dir-bear { background: #7f1d1d; color: #fca5a5; }
+
+/* ── IV / PCR colouring ── */
+.iv-hi { color: var(--iv-hi); font-weight: 600; }
+.iv-lo { color: var(--iv-lo); font-weight: 600; }
+.iv-mid { color: var(--iv-mid); }
+.pcr-hi { color: var(--pcr-hi); font-weight: 600; }
+.pcr-lo { color: var(--pcr-lo); font-weight: 600; }
+
+/* ── misc ── */
+.footer-note { color: var(--fg2); font-size: 0.8rem; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>TAPS Daily Brief — 20 Nov 2026 <span class="v3-badge">V3</span></h1>
+  <div class="date-line">TAPS &nbsp;·&nbsp; 20 Nov 2026</div>
+</div>
+
+<div class="section" id="s1">
+  <h2>Section 1 — Evening Pre-Screen &nbsp;<small class="ts">20-Nov-2026 20:13 IST</small></h2>
+  <div class="market-bar"><span>NIFTY <strong>25,800.6</strong></span><span>RS(20) <strong class="dir-bull">+14.2%</strong></span><span class="scan-meta">Scanned 213 symbols &nbsp;·&nbsp; <strong>21</strong> candidates &nbsp;·&nbsp; 192 filtered</span></div>
+  
+<div class="index-section">
+  <h3 class="index-heading">Index Trades — NIFTY &amp; BankNifty</h3>
+  <div class="idx-cards">
+
+<div class="idx-card idx-bull">
+  <div class="idx-header">
+    <span class="idx-sym">NIFTY</span>
+    <span class="idx-dir dir dir-bull">BULLISH</span>
+    <span class="idx-strat-badge">SPREAD</span>
+  </div>
+  <div class="idx-strategy">BULL_PUT_SPREAD</div>
+  <div class="idx-legs">
+    <span class="dl">Legs</span> <strong>Sell PE 25750 / Buy PE 25650</strong>
+    <span class="idx-expiry">WEEKLY 23-NOV-2026</span>
+  </div>
+  <div class="idx-metrics">
+    <span>ATM 25800</span>
+    <span class="iv-lo">IVR 1</span>
+    <span class="">PCR 0.83 (NEUTRAL)</span>
+    <span>Skew 0.79 (BALANCED)</span>
+    <span>VIX 17.3 <em class="vix-r">MODERATE</em></span>
+  </div>
+  <div class="idx-rationale">MODERATE bullish signal. IV rank 1 — credit put spread, theta positive.</div>
+</div>
+
+<div class="idx-card idx-bull">
+  <div class="idx-header">
+    <span class="idx-sym">BANKNIFTY</span>
+    <span class="idx-dir dir dir-bull">BULLISH</span>
+    <span class="idx-strat-badge">SPREAD</span>
+  </div>
+  <div class="idx-strategy">BULL_PUT_SPREAD</div>
+  <div class="idx-legs">
+    <span class="dl">Legs</span> <strong>Sell PE 64500 / Buy PE 64300</strong>
+    <span class="idx-expiry">MONTHLY 23-NOV-2026</span>
+  </div>
+  <div class="idx-metrics">
+    <span>ATM 64600</span>
+    <span class="iv-mid">IVR 32</span>
+    <span class="pcr-lo">PCR 0.64 (BEARISH)</span>
+    <span>Skew 0.64 (CALL_HEAVY)</span>
+    <span>VIX 17.3 <em class="vix-r">MODERATE</em></span>
+  </div>
+  <div class="idx-rationale">MODERATE bullish signal. IV rank 32 — credit put spread, theta positive.</div>
+</div>
+
+  </div>
+</div>
+<style>
+.index-section { margin-bottom: 20px; }
+.index-heading { font-size: 0.88rem; font-weight: 700; color: var(--fg2);
+                  text-transform: uppercase; letter-spacing: .05em;
+                  margin-bottom: 10px; }
+.idx-cards { display: flex; gap: 16px; flex-wrap: wrap; }
+.idx-card {
+  flex: 1 1 280px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px;
+}
+.idx-card.idx-bull { border-left: 4px solid var(--bull); }
+.idx-card.idx-bear { border-left: 4px solid var(--bear); }
+.idx-card.idx-neutral { border-left: 4px solid var(--fg2); }
+.idx-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.idx-sym { font-size: 1rem; font-weight: 800; }
+.idx-strat-badge {
+  margin-left: auto; font-size: 0.7rem; font-weight: 700;
+  background: var(--border); color: var(--fg2);
+  padding: 1px 7px; border-radius: 10px; text-transform: uppercase;
+}
+.idx-strat-badge.idx-fut {
+  background: #fef3c7; color: #92400e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .idx-strat-badge.idx-fut {
+    background: #451a03; color: #fcd34d;
+  }
+}
+:root[data-theme="dark"] .idx-strat-badge.idx-fut {
+  background: #451a03; color: #fcd34d;
+}
+.idx-strategy { font-size: 0.82rem; font-weight: 700; color: var(--accent);
+                 margin-bottom: 6px; }
+.idx-legs { font-size: 0.82rem; margin-bottom: 6px; }
+.idx-expiry { color: var(--fg2); font-size: 0.76rem; margin-left: 8px; }
+.idx-metrics {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  font-size: 0.78rem; color: var(--fg2);
+}
+.idx-metrics span { white-space: nowrap; }
+.vix-r { font-style: normal; font-size: 0.72rem; }
+.idx-rationale {
+  margin-top: 8px; font-size: 0.78rem; color: var(--fg2);
+  border-top: 1px solid var(--border); padding-top: 6px; line-height: 1.55;
+}
+</style>
+
+  <table class="signals-table">
+    <thead>
+      <tr>
+        <th>Symbol</th><th>Tier</th><th>Dir</th><th>Stage</th>
+        <th>Conv</th><th>RS 5d / 20d</th><th>Strategy</th>
+        <th>IV Rank / ATM IV</th><th>PCR / OI Skew</th><th>Beta</th>
+        <th>Crossovers</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr class="sig-row"><td class="sym">MAZDOCK</td><td><span class="tier tier-t3">T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 80</span></td><td class="conv">44</td><td class="opts">-5.2% <span class="na">/ -15.2%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 23</span> / 23.1%</td><td class="opts"><span class="pcr-lo">PCR 0.52</span> / skew 0.53</td><td class="opts">1.21</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×4b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">CGPOWER</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Trend Continuation ↓ <span class="na">· 100</span></td><td class="conv">34</td><td class="opts">-7.0% <span class="na">/ -16.8%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 0</span> / 20.4%</td><td class="opts"><span class="">PCR 0.99</span> / skew 1.08</td><td class="opts">-0.11</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×1b, DMA×4b</td></tr>
+<tr class="sig-row"><td class="sym">COALINDIA</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Trend Continuation ↓ <span class="na">· 100</span></td><td class="conv">33</td><td class="opts">-6.0% <span class="na">/ -16.0%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 23</span> / 9.9%</td><td class="opts"><span class="pcr-lo">PCR 0.53</span> / skew 0.39</td><td class="opts">0.28</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×5b</td></tr>
+<tr class="sig-row"><td class="sym">PREMIERENE</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Trend Continuation ↓ <span class="na">· 100</span></td><td class="conv">30</td><td class="opts">-9.5% <span class="na">/ -16.4%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 0</span> / 16.8%</td><td class="opts"><span class="pcr-lo">PCR 0.31</span> / skew 0.45</td><td class="opts">0.32</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×5b</td></tr>
+<tr class="sig-row"><td class="sym">VMM</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 80</span></td><td class="conv">30</td><td class="opts">-7.2% <span class="na">/ -8.9%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 5</span> / 25.1%</td><td class="opts"><span class="pcr-lo">PCR 0.60</span> / skew 1.16</td><td class="opts">1.14</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×4b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">NATIONALUM</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 80</span></td><td class="conv">29</td><td class="opts">-10.7% <span class="na">/ -13.7%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 89</span> / 48.2%</td><td class="opts"><span class="">PCR 0.76</span> / skew 1.29</td><td class="opts">0.89</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×5b</td></tr>
+<tr class="sig-row"><td class="sym">SAIL</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Trend Continuation ↓ <span class="na">· 100</span></td><td class="conv">28</td><td class="opts">-9.5% <span class="na">/ -14.3%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-mid">IVR 56</span> / 30.8%</td><td class="opts"><span class="pcr-lo">PCR 0.65</span> / skew 1.22</td><td class="opts">1.18</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">AMBER</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 100</span></td><td class="conv">27</td><td class="opts">-3.1% <span class="na">/ -1.9%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 12</span> / 30.5%</td><td class="opts"><span class="pcr-lo">PCR 0.68</span> / skew 1.20</td><td class="opts">0.88</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×2b</td></tr>
+<tr class="sig-row"><td class="sym">KPITTECH</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 80</span></td><td class="conv">24</td><td class="opts">-8.6% <span class="na">/ -16.7%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 21</span> / 26.7%</td><td class="opts"><span class="pcr-lo">PCR 0.34</span> / skew 0.41</td><td class="opts">0.90</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×5b</td></tr>
+<tr class="sig-row"><td class="sym">RECLTD</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">24</td><td class="opts">-3.9% <span class="na">/ -12.8%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 23</span> / 20.2%</td><td class="opts"><span class="">PCR 0.71</span> / skew 0.51</td><td class="opts">0.90</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">APLAPOLLO</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">RS Plunge <span class="na">· 100</span></td><td class="conv">24</td><td class="opts">-8.4% <span class="na">/ -9.8%</span></td><td class="strat"><span class="strat-name">BEAR_PUT_SPREAD</span></td><td class="opts"><span class="iv-mid">IVR 70</span> / 33.2%</td><td class="opts"><span class="pcr-lo">PCR 0.55</span> / skew 0.40</td><td class="opts">0.65</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×4b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">TATAELXSI</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Correction Recovery <span class="na">· 100</span></td><td class="conv">23</td><td class="opts">-2.2% <span class="na">/ -10.1%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 75</span> / 35.7%</td><td class="opts"><span class="pcr-lo">PCR 0.60</span> / skew 0.58</td><td class="opts">0.83</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×1b, DMA×1b</td></tr>
+<tr class="sig-row"><td class="sym">RVNL</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">22</td><td class="opts">-6.8% <span class="na">/ -8.8%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-hi">IVR 92</span> / 39.7%</td><td class="opts"><span class="pcr-lo">PCR 0.58</span> / skew 1.04</td><td class="opts">1.22</td><td class="sigs">Compound: MODERATE, RS: NEUTRAL, RSI×5b, DMA×1b</td></tr>
+<tr class="sig-row"><td class="sym">PFC</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">21</td><td class="opts">-3.0% <span class="na">/ -8.8%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 12</span> / 20.0%</td><td class="opts"><span class="">PCR 0.71</span> / skew 0.44</td><td class="opts">0.72</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">WAAREEENER</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Distribution / Decline <span class="na">· 80</span></td><td class="conv">21</td><td class="opts">-6.0% <span class="na">/ -9.7%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-mid">IVR 38</span> / 19.0%</td><td class="opts"><span class="pcr-lo">PCR 0.51</span> / skew 0.36</td><td class="opts">1.00</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×5b, DMA×3b</td></tr>
+<tr class="sig-row"><td class="sym">BRITANNIA</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 100</span></td><td class="conv">21</td><td class="opts">+0.5% <span class="na">/ -6.2%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 1</span> / 12.8%</td><td class="opts"><span class="pcr-lo">PCR 0.53</span> / skew 0.78</td><td class="opts">0.60</td><td class="sigs">Compound: STRONG, RS: BUILDING, RSI×2b, DMA×2b</td></tr>
+<tr class="sig-row"><td class="sym">SOLARINDS</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bear">BEARISH</span></td><td class="stage">Trend Continuation ↓ <span class="na">· 100</span></td><td class="conv">19</td><td class="opts">-5.9% <span class="na">/ -12.3%</span></td><td class="strat"><span class="strat-name">BEAR_CALL_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 11</span> / 20.2%</td><td class="opts"><span class="pcr-lo">PCR 0.55</span> / skew 1.11</td><td class="opts">0.39</td><td class="sigs">Compound: MODERATE, RS: NEUTRAL, RSI×1b, DMA×5b</td></tr>
+<tr class="sig-row"><td class="sym">HEROMOTOCO</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 100</span></td><td class="conv">16</td><td class="opts">+0.2% <span class="na">/ -4.5%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 22</span> / 16.3%</td><td class="opts"><span class="">PCR 1.07</span> / skew 0.74</td><td class="opts">0.91</td><td class="sigs">Compound: STRONG, RS: BUILDING, RSI×2b, DMA×2b</td></tr>
+<tr class="sig-row"><td class="sym">COFORGE</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Correction Recovery <span class="na">· 100</span></td><td class="conv">14</td><td class="opts">+0.3% <span class="na">/ -4.4%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 0</span> / 24.2%</td><td class="opts"><span class="">PCR 0.73</span> / skew 0.93</td><td class="opts">0.79</td><td class="sigs">Compound: STRONG, RS: BUILDING, RSI×1b, DMA×4b</td></tr>
+<tr class="sig-row"><td class="sym">MOTHERSON</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Trend Continuation <span class="na">· 100</span></td><td class="conv">13</td><td class="opts">-1.6% <span class="na">/ -4.4%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 24</span> / 18.2%</td><td class="opts"><span class="">PCR 0.77</span> / skew 0.44</td><td class="opts">0.97</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×2b, DMA×2b</td></tr>
+<tr class="sig-row"><td class="sym">PERSISTENT</td><td><span class="tier tier-t3">&lt;T3</span></td><td><span class="dir dir-bull">BULLISH</span></td><td class="stage">Correction Recovery <span class="na">· 100</span></td><td class="conv">12</td><td class="opts">-0.6% <span class="na">/ -7.2%</span></td><td class="strat"><span class="strat-name">BULL_PUT_SPREAD</span></td><td class="opts"><span class="iv-lo">IVR 0</span> / 4.8%</td><td class="opts"><span class="pcr-lo">PCR 0.61</span> / skew 0.78</td><td class="opts">0.63</td><td class="sigs">Compound: STRONG, RS: NEUTRAL, RSI×1b, DMA×1b</td></tr>
+    </tbody>
+  </table>
+  <p class="footer-note">
+    21 candidates screened · 16 new PENDING · 0 carried forward · 5 already confirmed — confirmation check at 09:20 tomorrow.
+  </p>
+</div>
+
+<!-- APPEND_HERE -->
+</body>
+</html>
